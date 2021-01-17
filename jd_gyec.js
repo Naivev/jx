@@ -15,7 +15,7 @@ boxjs 填写具体兑换商品的名称，默认为1888京豆
 ============Quantumultx===============
 [task_local]
 #工业品爱消除
-30 * * * * https://raw.githubusercontent.com/shylocks/Loon/main/jd_gyec.js, tag=工业品爱消除, img-url=https://raw.githubusercontent.com/yogayyy/Scripts/main/Icon/shylock/jd_gyxxl.png, enabled=true
+30 * * * * https://raw.githubusercontent.com/shylocks/Loon/main/jd_gyec.js, tag=工业品爱消除, img-url=https://raw.githubusercontent.com/yogayyy/Scripts/main/Icon/shylock/jd_gyxxl.jpg, enabled=true
 
 ================Loon==============
 [Script]
@@ -31,7 +31,8 @@ const $ = new Env('工业品爱消除');
 const notify = $.isNode() ? require('./sendNotify') : '';
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 let inviteCodes = [
-  '1804444@2753286@2753421',
+  '840266@2583822@2585219@2586018@1556311@2583822@2585256@2586023@2728968',
+  '840266@2583822@2585219@2586018@1556311@2583822@2585256@2586023@2728968',
 ]
 let exchangeName = $.isNode() ? (process.env.EXCHANGE_GYEC ? process.env.EXCHANGE_GYEC : '1888京豆') : ($.getdata('JDGYEC') ? $.getdata('JDGYEC') : '1888京豆')
 //Node.js用户请在jdCookie.js处填写京东ck;
@@ -43,6 +44,7 @@ if ($.isNode()) {
   })
   if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false') console.log = () => {
   };
+  if(JSON.stringify(process.env).indexOf('GITHUB')>-1) process.exit(0)
 } else {
   let cookiesData = $.getdata('CookiesJD') || "[]";
   cookiesData = jsonParse(cookiesData);
@@ -260,7 +262,7 @@ function getTaskList() {
                 if (task.res.sName === "闯关集星") {
                   $.level = task.state.value + 1
                   console.log(`当前关卡：${$.level}`)
-                  while ($.strength >= 5) {
+                  while ($.strength >= 5 && $.level <= 240) {
                     await beginLevel()
                   }
                 } else if (task.res.sName === "逛逛店铺" || task.res.sName === "浏览会场") {
