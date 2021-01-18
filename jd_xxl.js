@@ -12,7 +12,7 @@
 ============Quantumultx===============
 [task_local]
 #东东爱消除
-0 * * * * https://raw.githubusercontent.com/shylocks/Loon/main/jd_gyec.js, tag=东东爱消除, img-url=https://raw.githubusercontent.com/yogayyy/Scripts/main/Icon/shylocks/jd_xxl.jpg, enabled=true
+0 * * * * https://raw.githubusercontent.com/shylocks/Loon/main/jd_xxl.js, tag=东东爱消除, img-url=https://raw.githubusercontent.com/yogayyy/Scripts/main/Icon/shylocks/jd_xxl.jpg, enabled=true
 
 ================Loon==============
 [Script]
@@ -33,7 +33,7 @@ let exchangeName = $.isNode() ? (process.env.EXCHANGE_EC ? process.env.EXCHANGE_
 //IOS等用户直接用NobyDa的jd cookie
 let cookiesArr = [], cookie = '', message;
 let inviteCodes = [
-  '1@1',
+  '1804444@2753286@2753421',
 ]
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
@@ -260,7 +260,7 @@ function getTaskList() {
                 if (task.res.sName === "闯关集星") {
                   $.level = task.state.value + 1
                   console.log(`当前关卡：${$.level}`)
-                  while ($.strength >= 5) {
+                  while ($.strength >= 5 && $.level <= 240) {
                     await beginLevel()
                   }
                 } else if (task.res.sName === "逛逛店铺") {
