@@ -2,8 +2,8 @@
 京东神仙书院
 活动时间:2021-1-20至2021-2-5
 暂不加入品牌会员，需要自行填写坐标，用于做逛身边好店任务
-环境变量JD_IMMORTAL_LATLON(经纬度)
-示例：D_IMMORTAL_LATLON={"lat":33.1, "lng":118.1}
+环境变量：JD_IMMORTAL_LATLON(经纬度)
+示例：JD_IMMORTAL_LATLON={"lat":33.1, "lng":118.1}
 boxjs IMMORTAL_LATLON
 活动入口: 京东app-我的-神仙书院
 活动地址：https://h5.m.jd.com//babelDiy//Zeus//4XjemYYyPScjmGyjej78M6nsjZvj//index.html?babelChannel=ttt9
@@ -49,8 +49,7 @@ if ($.isNode()) {
 }
 const JD_API_HOST = 'https://api.m.jd.com/client.action';
 const inviteCodes = [
-  `39xIs4YwE5Z7CPQQ0baz9jNWO6PSZHsNWqfOwWyqScbJBGhg4v7HbuBg63TJ4@27xIs4YwE5Z7FGzJqrMmavC_vWKtbEaJxbz0Vahw@43xIs4YwE5Z7DsWOzDSP_N6WTDnbA0wBjjof6cA9FzcbHMcZB9wE1R3ToSluCgxAzEXQ@43xIs4YwE5Z7DsWOzDSEuRWEOROpnDjMx_VvSs5ikYQ8XgcZB9whEHjDmPKQoL16TZ8w`,
-  `39xIs4YwE5Z7CPQQ0baz9jNWO6PSZHsNWqfOwWyqScbJBGhg4v7HbuBg63TJ4@27xIs4YwE5Z7FGzJqrMmavC_vWKtbEaJxbz0Vahw@43xIs4YwE5Z7DsWOzDSP_N6WTDnbA0wBjjof6cA9FzcbHMcZB9wE1R3ToSluCgxAzEXQ@43xIs4YwE5Z7DsWOzDSEuRWEOROpnDjMx_VvSs5ikYQ8XgcZB9whEHjDmPKQoL16TZ8w`
+  `38xIs4YwE5Z7G9L7XPXRmB0j5mRDNcVkOxNS2vjXQ_XyzEPfQW7aIlQfmOg@40xIs4YwE5Z7DsWOzDGD-BWQO5q5Q1jv6jKikY1-JwTcZB9kyAH8UJ8eUYdzAAF@43xIs4YwE5Z7DsWOzDSZ6B5RsL8HRNT6K4OudjbqNOptrccZB9wRdQ22ys3-npVfiC2A`
 ];
 !(async () => {
   await requireConfig();
@@ -270,7 +269,7 @@ function getTaskList(body={}) {
 function readShareCode() {
   console.log(`开始`)
   return new Promise(async resolve => {
-    $.get({url: `https://code.chiang.fun/api/v1/jd/jdnian/read/${randomCount}/`, 'timeout': 10000}, (err, resp, data) => {
+    $.get({url: `https://code.ng.fun/api/v1/jd/jdnian/read/${randomCount}/`, 'timeout': 10000}, (err, resp, data) => {
       try {
         if (err) {
           console.log(`${JSON.stringify(err)}`)
@@ -317,11 +316,11 @@ function requireConfig() {
     //Node.js用户请在jdCookie.js处填写京东ck;
     let shareCodes = []
     console.log(`共${cookiesArr.length}个京东账号\n`);
-    if ($.isNode() && process.env.JDNIAN_SHARECODES) {
-      if (process.env.JDNIAN_SHARECODES.indexOf('\n') > -1) {
-        shareCodes = process.env.JDNIAN_SHARECODES.split('\n');
+    if ($.isNode() && process.env.JDSXSY_SHARECODES) {
+      if (process.env.JDSXSY_SHARECODES.indexOf('\n') > -1) {
+        shareCodes = process.env.JDSXSY_SHARECODES.split('\n');
       } else {
-        shareCodes = process.env.JDNIAN_SHARECODES.split('&');
+        shareCodes = process.env.JDSXSY_SHARECODES.split('&');
       }
     }
     $.shareCodesArr = [];
