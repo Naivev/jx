@@ -49,8 +49,7 @@ const inviteCodes = [
   'cgxZ-dkj8glZPoZzdVzqrKPRs-x9pavvOb7BuPeqzTxS9LE8EA@cgxZdTXtcd6OlHKVfGPtrjz0kEQrCy6WAGgSKTIRG5ZLxtoJJleNZZw@cgxZdTXtI-nZvlybWgag5qGjhPQY9Ujpuww0p3y2FltBFaaIp08aLh4pUj0',
 ];
 const pkInviteCodes = [
-  'IgNWdiLGaPadvlqJQnnKp27-YpAvKvSYNTSkTGvZylf_0wcvqD9EMkohEd8@IgNWdiLGaPaZskfACQyhgLSpZWps-WtQEW3McifV@IgNWdiLGaPaAvmHPAQf769XqjJjMyRirPzN9-AS-WHY9Y_G7t9Cwe5gdiI2qEvHZ',
-  'IgNWdiLGaPadvlqJQnnKp27-YpAvKvSYNTSkTGvZylf_0wcvqD9EMkohEd8@IgNWdiLGaPaZskfACQyhgLSpZWps-WtQEW3McifV@IgNWdiLGaPaAvmHPAQf769XqjJjMyRirPzN9-AS-WHY9Y_G7t9Cwe5gdiI2qEvHZ'
+  'IgNWdiLGaPYMUq8fu4Z9Z3cgp7fazwgALKVSDX4k1RDyBT_lsPlVxGt3',
 ]
 !(async () => {
   await requireConfig();
@@ -941,7 +940,7 @@ function killCoupon(skuId) {
 function readShareCode() {
   console.log(`开始`)
   return new Promise(async resolve => {
-    $.get({url: `https://code.chiang.fun/api/v1/jd/jdnian/read/${randomCount}/`, 'timeout': 10000}, (err, resp, data) => {
+    $.get({url: `https://code.chian.fun/api/v1/jd/jdnian/read/${randomCount}/`, 'timeout': 10000}, (err, resp, data) => {
       try {
         if (err) {
           console.log(`${JSON.stringify(err)}`)
