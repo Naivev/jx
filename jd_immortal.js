@@ -268,6 +268,9 @@ function exchange() {
             console.log(`兑换成功，消耗${consumedUserScore}积分，获得${receivedJbeanNum}京豆`)
             $.msg($.name, ``, `京东账号${$.index} ${$.nickName}\n兑换成功，消耗${consumedUserScore}积分，获得${receivedJbeanNum}京豆`);
             if ($.isNode()) await notify.sendNotify(`${$.name} - ${$.index} - ${$.nickName}`, `兑换成功，消耗${consumedUserScore}积分，获得${receivedJbeanNum}京豆`);
+          } else if (data['retCode'] === "323") {
+            console.log(`还木有到兑换时间哦~ `)
+            message += `还木有到兑换时间哦~ \n`
           } else {
             $.risk = true
             console.log(`账号被风控，无法参与活动`)
@@ -341,7 +344,7 @@ function readShareCode() {
   console.log(`开始`)
   return new Promise(async resolve => {
     $.get({
-      url: `http://jd.turinglas.net/api/v2/jd/immortal/read/${randomCount}/`,
+      url: `http://jd.turinglabs.net/api/v2/jd/immortal/read/${randomCount}/`,
       'timeout': 10000
     }, (err, resp, data) => {
       try {
