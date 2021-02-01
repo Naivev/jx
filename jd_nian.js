@@ -2,24 +2,24 @@
 京东炸年兽🧨
 活动时间:2021-1-18至2021-2-11
 暂不加入品牌会员
-活动入口:https://wbbny.m.jd.com/babelDiy/Zeus/2cKMj86srRdhgWcKonfExzK4ZMBy/index.html
-活动地址：京东app左侧浮动窗口
+地址 https://wbbny.m.jd.com/babelDiy/Zeus/2cKMj86srRdhgWcKonfExzK4ZMBy/index.html
+活动入口：京东app首页浮动窗口
 已支持IOS双京东账号,Node.js支持N个京东账号
 脚本兼容: QuantumultX, Surge, Loon, JSBox, Node.js
 ============Quantumultx===============
 [task_local]
 #京东炸年兽🧨
-0 9,12,20 * * * https://raw.githubusercontent.com/LXK9301/jd_scripts/master/jd_nian.js, tag=京东炸年兽🧨, img-url=https://raw.githubusercontent.com/yogayyy/Scripts/main/Icon/lxk0301/jd_nian.png, enabled=true
+0 9,12,20,21 * * * https://gitee.com/lxk0301/jd_scripts/raw/master/jd_nian.js, tag=京东炸年兽🧨, img-url=https://raw.githubusercontent.com/yogayyy/Scripts/main/Icon/lxk0301/jd_nian.png, enabled=true
 
 ================Loon==============
 [Script]
-cron "0 9,12,20 * * *" script-path=https://raw.githubusercontent.com/LXK9301/jd_scripts/master/jd_nian.js,tag=京东炸年兽🧨
+cron "0 9,12,20,21 * * *" script-path=https://gitee.com/lxk0301/jd_scripts/raw/master/jd_nian.js,tag=京东炸年兽🧨
 
 ===============Surge=================
-京东炸年兽🧨 = type=cron,cronexp="0 9,12,20 * * *",wake-system=1,timeout=3600,script-path=https://raw.githubusercontent.com/LXK9301/jd_scripts/master/jd_nian.js
+京东炸年兽🧨 = type=cron,cronexp="0 9,12,20,21 * * *",wake-system=1,timeout=3600,script-path=https://gitee.com/lxk0301/jd_scripts/raw/master/jd_nian.js
 
 ============小火箭=========
-京东炸年兽🧨 = type=cron,script-path=https://raw.githubusercontent.com/LXK9301/jd_scripts/master/jd_nian.js, cronexpr="0 9,12,20 * * *", timeout=3600, enable=true
+京东炸年兽🧨 = type=cron,script-path=https://gitee.com/lxk0301/jd_scripts/raw/master/jd_nian.js, cronexpr="0 9,12,20,21 * * *", timeout=3600, enable=true
  */
 const $ = new Env('京东炸年兽🧨');
 
@@ -29,7 +29,7 @@ const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 let jdNotify = true;//是否关闭通知，false打开通知推送，true关闭通知推送
 const randomCount = $.isNode() ? 20 : 5;
 //IOS等用户直接用NobyDa的jd cookie
-let cookiesArr = [], cookie = '', message;
+let cookiesArr = [], cookie = '', message, superAssist = [];
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
     cookiesArr.push(jdCookieNode[item])
@@ -49,7 +49,7 @@ const inviteCodes = [
   `cgxZ-dkj8glZPoZzdVzqrKPRs-x9pavvOb7BuPeqzTxS9LE8EA@cgxZdTXtcd6OlHKVfGPtrjz0kEQrCy6WAGgSKTIRG5ZLxtoJJleNZZw@cgxZdTXtI-nZvlybWgag5qGjhPQY9Ujpuww0p3y2FltBFaaIp08aLh4pUj0,`,
 ];
 const pkInviteCodes = [
-  'IgNWdiLGaPYMUq8fu4Z9Z3cgp7fazwgALKVSDX4k1RDyBT_lsPlVxGt1',
+  'IgNWdiLGaPYMUq8fu4Z9Z3cgp7fazwgALKVSDX4k1RDyBT_lsPlVxGpw',
 ]
 !(async () => {
   await requireConfig();
@@ -80,6 +80,28 @@ const pkInviteCodes = [
       await jdNian()
     }
   }
+
+  for (let i = 0; i < cookiesArr.length; i++) {
+    if (cookiesArr[i]) {
+      cookie = cookiesArr[i];
+      $.UserName = decodeURIComponent(cookie.match(/pt_pin=(.+?);/) && cookie.match(/pt_pin=(.+?);/)[1])
+      $.index = i + 1;
+      $.isLogin = true;
+      $.nickName = '';
+      message = '';
+      await TotalBean();
+      console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
+      if (!$.isLogin) {
+        $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
+
+        if ($.isNode()) {
+          await notify.sendNotify(`${$.name}cookie已失效 - ${$.UserName}`, `京东账号${$.index} ${$.UserName}\n请重新登录获取cookie`);
+        }
+        continue
+      }
+      await helpSuper()
+    }
+  }
 })()
   .catch((e) => {
     $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
@@ -105,6 +127,7 @@ async function jdNian() {
       $.hasGroup = false
       await pkTaskStealDetail()
       if ($.hasGroup) await pkInfo()
+      await helpFriendsPK()
     }
     await $.wait(2000)
     await killCouponList()
@@ -117,6 +140,8 @@ async function jdNian() {
     await doTask()
     await $.wait(2000)
     await helpFriends()
+    await $.wait(2000)
+    await getSpecialGiftDetail()
     await $.wait(2000)
     await getHomeData(true)
     await showMsg()
@@ -159,6 +184,15 @@ async function helpFriends() {
     if (!code) continue
     await getFriendData(code)
     await $.wait(1000)
+  }
+}
+
+async function helpSuper(){
+  $.secretp = null
+  await getHomeData(true)
+  if (!$.secretp) return
+  for(let item of superAssist){
+    await collectSpecialScore(item.taskId, item.itemId, null, item.inviteId)
   }
 }
 
@@ -721,6 +755,20 @@ function shopLotteryInfo(shopSign) {
                         console.log(`${vo.taskName}已做完`)
                       }
                     }
+                  }else if (vo.taskType === 21) {
+                    if (vo.brandMemberVos) {
+                      if (vo.status === 1) {
+                        console.log(`准备做此任务：${vo.taskName}`)
+                        for (let task of vo.brandMemberVos) {
+                          if (task.status === 1) {
+                            await $.wait(2000)
+                            await collectScore(vo.taskId, task.advertId, null, null, shopSign);
+                          }
+                        }
+                      } else if (vo.status === 2) {
+                        console.log(`${vo.taskName}已做完`)
+                      }
+                    }
                   }
                 }
               }
@@ -758,6 +806,8 @@ function doShopLottery(shopSign) {
                 console.log(`抽奖成功，获得${result.score}爆竹🧨`)
               else if (result.awardType === 2 || result.awardType === 3)
                 console.log(`抽奖成功，获得优惠卷`)
+              else if (result.awardType === 5)
+                console.log(`抽奖成功，品牌卡`)
               else
                 console.log(`抽奖成功，获得${JSON.stringify(result)}`)
             } else {
@@ -786,8 +836,9 @@ function pkInfo() {
           if (safeGet(data)) {
             data = JSON.parse(data);
             if (data.code === 0 && data.data && data.data.bizCode === 0) {
-              console.log(`\n您的好友PK助力码为${data.data.result.groupInfo.groupAssistInviteId}\n`)
+              console.log(`\n您的好友PK助力码为${data.data.result.groupInfo.groupAssistInviteId}\n注：此pk邀请码每天都变！`)
               let info = data.data.result.groupPkInfo
+              console.log(`预计分得:${data.data.result.groupInfo.personalAward}红包`)
               if (info.dayAward)
                 console.log(`白天关卡：${info.dayAward}元红包，完成进度 ${info.dayTotalValue}/${info.dayTargetSell}`)
               else {
@@ -1045,11 +1096,156 @@ function killCoupon(skuId) {
   })
 }
 
+function getSpecialGiftDetail() {
+  return new Promise((resolve) => {
+    $.post(taskPostUrl('nian_getSpecialGiftDetail'), async (err, resp, data) => {
+      try {
+        if (err) {
+          console.log(`${JSON.stringify(err)}`)
+          console.log(`${$.name} API请求失败，请检查网路重试`)
+        } else {
+          data = JSON.parse(data);
+          if (data && data.data['bizCode'] === 0) {
+            let flag = true
+            for(let item of data.data.result.taskVos){
+              if (item.taskType === 3 || item.taskType === 26) {
+                if (item.shoppingActivityVos) {
+                  if (item.status === 1) {
+                    flag = false
+                    console.log(`准备做此任务：${item.taskName}`)
+                    for (let task of item.shoppingActivityVos) {
+                      if (task.status === 1) {
+                        await collectSpecialScore(item.taskId, task.itemId);
+                      }
+                      await $.wait(3000)
+                    }
+                  } else if (item.status === 2) {
+                    console.log(`${item.taskName}已做完`)
+                  }
+                }
+              }
+              else if (item.taskType === 0) {
+                if (item.status === 1) {
+                  flag = false
+                  console.log(`准备做此任务：${item.taskName}`)
+                  await collectSpecialScore(item.taskId, item.simpleRecordInfoVo.itemId);
+                } else if (item.status === 2) {
+                  console.log(`${item.taskName}已做完`)
+                }
+              } else{
+                if (item.status === 1) {
+                  flag = false
+                  superAssist.push({
+                    "inviteId": data.data.result.inviteId,
+                    "itemId": item.assistTaskDetailVo.itemId,
+                    "taskId": item.taskId
+                  })
+                } else if (item.status === 2) {
+                  console.log(`${item.taskName}已做完`)
+                }
+              }
+            }
+            if(flag){
+              await getSpecialGiftInfo()
+            }
+          }
+        }
+      } catch (e) {
+        $.logErr(e, resp);
+      } finally {
+        resolve();
+      }
+    })
+  })
+}
+function getSpecialGiftInfo() {
+  return new Promise((resolve) => {
+    $.post(taskPostUrl('nian_getSpecialGiftInfo',"nian_getSpecialGiftInfo"), async (err, resp, data) => {
+      try {
+        if (err) {
+          console.log(`${JSON.stringify(err)}`)
+          console.log(`${$.name} API请求失败，请检查网路重试`)
+        } else {
+          data = JSON.parse(data);
+          if (data && data.data['bizCode'] === 0) {
+            console.log(`领奖成功，获得${data.data.result.score}爆竹🧨`)
+          }else{
+            console.log(data.data.bizMsg)
+          }
+        }
+      } catch (e) {
+        $.logErr(e, resp);
+      } finally {
+        resolve();
+      }
+    })
+  })
+}
+
+function collectSpecialScore(taskId, itemId, actionType = null, inviteId = null, shopSign = null) {
+  let temp = {
+    "taskId": taskId,
+    "rnd": getRnd(),
+    "inviteId": "-1",
+    "stealId": "-1"
+  }
+  if (itemId) temp['itemId'] = itemId
+  if (actionType) temp['actionType'] = actionType
+  if (inviteId) temp['inviteId'] = inviteId
+  if (shopSign) temp['shopSign'] = shopSign
+  const extraData = {
+    "jj": 6,
+    "buttonid": "jmdd-react-smash_0",
+    "sceneid": "homePageh5",
+    "appid": '50073'
+  }
+  let body = {
+    ...encode(temp, $.secretp, extraData),
+    taskId: taskId,
+    itemId: itemId
+  }
+  if (actionType) body['actionType'] = actionType
+  if (inviteId) body['inviteId'] = inviteId
+  if (shopSign) body['shopSign'] = shopSign
+  return new Promise(resolve => {
+    $.post(taskPostUrl("nian_collectSpecialGift", body, "nian_collectSpecialGift"), async (err, resp, data) => {
+      try {
+        if (err) {
+          console.log(`${JSON.stringify(err)}`)
+          console.log(`${$.name} API请求失败，请检查网路重试`)
+        } else {
+          if (safeGet(data)) {
+            data = JSON.parse(data);
+            if (data.code === 0) {
+              if (data.data && data.data.bizCode === 0) {
+                if (data.data.result.score)
+                  console.log(`任务完成，获得${data.data.result.score}爆竹🧨`)
+                else if (data.data.result.maxAssistTimes) {
+                  console.log(`助力好友成功`)
+                } else {
+                  console.log(`任务上报成功`)
+                }
+                // $.userInfo = data.data.result.userInfo;
+              } else {
+                console.log(data.data.bizMsg)
+              }
+            }
+          }
+        }
+      } catch (e) {
+        $.logErr(e, resp)
+      } finally {
+        resolve();
+      }
+    })
+  })
+}
+
 function readShareCode() {
   console.log(`开始`)
   return new Promise(async resolve => {
     $.get({
-      url: `https://code.ching.fun/api/v1/jd/jdnian/read/${randomCount}/`,
+      url: `https://code.chian.fun/api/v1/jd/jdnian/read/${randomCount}/`,
       'timeout': 10000
     }, (err, resp, data) => {
       try {
@@ -1077,7 +1273,7 @@ function readShareCodePk() {
   console.log(`开始`)
   return new Promise(async resolve => {
     $.get({
-      url: `http://jd.turnglabs.net/api/v2/jd/nian_pk/read/${randomCount}/`,
+      url: `http://jd.turinglab.net/api/v2/jd/nian/read/${randomCount}/`,
       'timeout': 10000
     }, (err, resp, data) => {
       try {
@@ -1133,7 +1329,9 @@ function shareCodesFormatPk() {
       const tempIndex = $.index > pkInviteCodes.length ? (pkInviteCodes.length - 1) : ($.index - 1);
       $.newShareCodesPk = pkInviteCodes[tempIndex].split('@');
     }
-    const readShareCodeRes = null //await readShareCodePk();
+    let readShareCodeRes = null
+    if (new Date().getUTCHours() >= 12)
+      readShareCodeRes = await readShareCodePk();
     if (readShareCodeRes && readShareCodeRes.code === 200) {
       $.newShareCodesPk = [...new Set([...$.newShareCodesPk, ...(readShareCodeRes.data || [])])];
     }
