@@ -46,13 +46,13 @@ if ($.isNode()) {
 }
 const JD_API_HOST = 'https://api.m.jd.com/client.action';
 const inviteCodes = [
-  `cgxZbDnLLbvT4kKFa2r4itMpof2y7_o@cgxZdTXtILLevwyYCwz65yWwCE8lGkr3bUNrT0h7kLPi4wxXS762i1R7_A0@cgxZdTXtILiLvg7OAASp61meehou4OeZvqbjghsZlc3rI5SBk7b3InUqSQ0@cgxZdTXtIL-L7FzMAQCqvap-CydslPKkAn5-YquhVOdq2fHQPxbVJ4pskHs`,
-  `cgxZbDnLLbvT4kKFa2r4itMpof2y7_o@cgxZdTXtILLevwyYCwz65yWwCE8lGkr3bUNrT0h7kLPi4wxXS762i1R7_A0@cgxZdTXtILiLvg7OAASp61meehou4OeZvqbjghsZlc3rI5SBk7b3InUqSQ0@cgxZdTXtIL-L7FzMAQCqvap-CydslPKkAn5-YquhVOdq2fHQPxbVJ4pskHs`
+  `cgxZ-dkj8glZPoZzdVzqrKPRs-x9pavvOb7BuPeqzTxS9LE8EA@cgxZdTXtcd6OlHKVfGPtrjz0kEQrCy6WAGgSKTIRG5ZLxtoJJleNZZw@cgxZdTXtI-nZvlybWgag5qGjhPQY9Ujpuww0p3y2FltBFaaIp08aLh4pUj0,`,
 ];
 const pkInviteCodes = [
-  'IgNWdiLGaPadvlqJQnnKp27-YpAvKvSYNTSkTGvZylf_0wcvqD9EMkohEN4@IgNWdiLGaPaZskfACQyhgLSpZWps-WtQEW3McibU@IgNWdiLGaPaAvmHPAQf769XqjJjMyRirPzN9-AS-WHY9Y_G7t9Cwe5gdiI2qEvDY@IgNWdiLGaPYCeJUfsq18UNi5ln9xEZSPRdOue8Wl3hJTS2SQzU0vulL0fHeULJaIfgqHFd7f_ao@IgNWdiLGaPYCeJUfsq18UNi5ln9xEZSPRdOue8Wl3hLRjZBAJLHzBpcl18AeskNYctp_8w',
-  'IgNWdiLGaPadvlqJQnnKp27-YpAvKvSYNTSkTGvZylf_0wcvqD9EMkohEN4@IgNWdiLGaPaZskfACQyhgLSpZWps-WtQEW3McibU@IgNWdiLGaPaAvmHPAQf769XqjJjMyRirPzN9-AS-WHY9Y_G7t9Cwe5gdiI2qEvDY@IgNWdiLGaPYCeJUfsq18UNi5ln9xEZSPRdOue8Wl3hJTS2SQzU0vulL0fHeULJaIfgqHFd7f_ao@IgNWdiLGaPYCeJUfsq18UNi5ln9xEZSPRdOue8Wl3hLRjZBAJLHzBpcl18AeskNYctp_8w'
+  'IgNWdiLGaPYMUq8fu4Z9Z3cgp7fazwgALKVSDX4k1RDyBT_lsPlVxGpw',
 ]
+let nowTimes = new Date(new Date().getTime() + new Date().getTimezoneOffset()*60*1000 + 8*60*60*1000);
+const openUrl = `openjd://virtual?params=%7B%20%22category%22:%20%22jump%22,%20%22des%22:%20%22m%22,%20%22url%22:%20%22https://wbbny.m.jd.com/babelDiy/Zeus/2cKMj86srRdhgWcKonfExzK4ZMBy/index.html%22%20%7D`;
 !(async () => {
   await requireConfig();
   if (!cookiesArr[0]) {
@@ -92,7 +92,6 @@ const pkInviteCodes = [
       $.nickName = '';
       message = '';
       await TotalBean();
-      console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
       if (!$.isLogin) {
         $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
 
@@ -103,6 +102,16 @@ const pkInviteCodes = [
       }
       await helpSuper()
     }
+  }
+  if ((nowTimes.getHours() < 20 && nowTimes.getHours() >= 10) && nowTimes.getDate() === 4) {
+    if (nowTimes.getHours() === 12 || nowTimes.getHours() === 19) {
+      $.msg($.name, '', '队伍红包已可兑换\n点击弹窗直达兑换页面', { 'open-url' : openUrl});
+      if ($.isNode()) await notify.sendNotify($.name, `队伍PK红包已可兑换\n兑换地址: https://wbbny.m.jd.com/babelDiy/Zeus/2cKMj86srRdhgWcKonfExzK4ZMBy/index.html`)
+    }
+  }
+  if (nowTimes.getHours() === 20 && nowTimes.getDate() === 4) {
+    $.msg($.name, '', '年终奖红包已可兑换\n点击弹窗直达兑换页面', { 'open-url' : openUrl})
+    if ($.isNode()) await notify.sendNotify($.name, `年终奖红包已可兑换\n兑换地址: https://wbbny.m.jd.com/babelDiy/Zeus/2cKMj86srRdhgWcKonfExzK4ZMBy/index.html`)
   }
 })()
   .catch((e) => {
@@ -117,21 +126,22 @@ async function jdNian() {
     $.full = false
     await getHomeData()
     if (!$.secretp) return
-    let hour = new Date().getUTCHours()
-    if (1 <= hour && hour < 12) {
-      // 北京时间9点-20点
-      $.hasGroup = false
-      await pkTaskDetail()
-      if ($.hasGroup) await pkInfo()
-      await helpFriendsPK()
-    }
-    if (12 <= hour && hour < 14) {
-      // 北京时间20点-22点
-      $.hasGroup = false
-      await pkTaskStealDetail()
-      if ($.hasGroup) await pkInfo()
-      await helpFriendsPK()
-    }
+    // 注释PK互助代码
+    // let hour = new Date().getUTCHours()
+    // if (1 <= hour && hour < 12) {
+    //   // 北京时间9点-20点
+    //   $.hasGroup = false
+    //   await pkTaskDetail()
+    //   if ($.hasGroup) await pkInfo()
+    //   await helpFriendsPK()
+    // }
+    // if (12 <= hour && hour < 14) {
+    //   // 北京时间20点-22点
+    //   $.hasGroup = false
+    //   await pkTaskStealDetail()
+    //   if ($.hasGroup) await pkInfo()
+    //   await helpFriendsPK()
+    // }
     if($.full) return
     await $.wait(2000)
     await killCouponList()
@@ -1302,7 +1312,7 @@ function readShareCode() {
   console.log(`开始`)
   return new Promise(async resolve => {
     $.get({
-      url: `https://code.chian.fun/api/v1/jd/jdnian/read/${randomCount}/`,
+      url: `https://code.ciang.fun/api/v1/jd/jdnian/read/${randomCount}/`,
       'timeout': 10000
     }, (err, resp, data) => {
       try {
@@ -1330,7 +1340,7 @@ function readShareCodePk() {
   console.log(`开始`)
   return new Promise(async resolve => {
     $.get({
-      url: `http://jd.turinglab.net/api/v2/jd/nian/read/${randomCount}/`,
+      url: `http://jd.turinglbs.net/api/v2/jd/nian/read/${randomCount}/`,
       'timeout': 10000
     }, (err, resp, data) => {
       try {
